@@ -102,6 +102,48 @@ function env_view(_id) {
             console.log('没找到哦');
         }
     });
+    //绑定修改按钮点击方法---提交修改
+    $('[type="submit"]').click(function () {
+        update_env(_id);
+    })
+
+}
+
+//提交修改
+function update_env(_id) {
+    const csrftoken = getCookie('csrftoken'); //从cookie获取django的crsftoken
+    //获取信息
+    let desc= $('[name="desc"]').val();
+    let ip = $('[name="ip"]').val();
+    let port = $('[name="port"]').val();
+    let category = $('[name="category"]').val();
+    let os = $('[name="os"]').val();
+    let project_id = $('[name="project"] option:selected').val();
+//    let status = $('[name="status"] option:selected').val();
+    const status = $('[name="status"]').prop("checked");
+
+
+    let payload = {'desc':desc,'ip':ip,'port':port,'category':category,'os':os,'project_id':project_id,'status':status}
+    //提交信息
+    $.ajax({
+        type: 'put',
+        data: JSON.stringify(payload),
+        url: '/api/env/?id='+_id,
+        contentType: 'application/json; charset=utf-8',
+        headers: {'X-CSRFToken': csrftoken},
+        success: function (result,TextStatus){
+            console.log('success')
+            //返回列表页面
+            window.location.href='environments.html'
+        },
+        error:function (result,TextStatus){
+            console.log('fail'+result.msg)
+        },
+    });
+    //绑定修改按钮点击方法---提交修改
+    $('[type="submit"]').click(function () {
+        update_env(_id);
+    })
 }
 
 function paint_env_view(result) {
@@ -118,9 +160,13 @@ function paint_env_view(result) {
     target_selected('select[name="category"]',env.category)
 }
 
+
+
 function delete_env(_id) {
     return common_delete(_id,'/api/env/')
 }
+
+
 
 function addFunctionAlty(value, row, index) {
     return [
