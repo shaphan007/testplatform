@@ -107,7 +107,7 @@ function on_listen_choice(_id){
 
 //删除项目按钮
 function delete_project(id){
-    return common_delete(_id,'/api/project/')
+    return common_delete(id,'/api/project/')
 }
 
 
