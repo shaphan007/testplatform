@@ -1,0 +1,253 @@
+Project:
+  {
+    "retcode": 200,
+    "msg": "\u67e5\u8be2\u6210\u529f",
+    "retlist": [
+      {
+        "id": 28,
+        "name": "\u81ea\u52a8\u5316\u5e73\u53f017",
+        "desc":"项目描述",
+        "status": "developing",
+        "version": "v8",
+        "create_time": "2021-03-27/14:17",
+        "update_time": "2021-03-27/14:17",
+        "admin": {
+          "id": 1,
+          "username": "\u5c0f\u660e",
+          "first_name": "",
+          "email": ""
+        },
+        "modules": [
+          {
+            "id": 4,
+            "name": "\u7279\u65af\u62c9",
+            "desc": "mod3"
+          }
+        ],
+        "members": [
+          {
+            "id": 1,
+            "username": "\u5c0f\u660e",
+            "email": "",
+            "first_name": ""
+          },
+          {
+            "id": 2,
+            "username": "\u5c0fC",
+            "email": "",
+            "first_name": ""
+          }
+        ]
+      }
+    ]
+  }
+
+Module:
+  {
+    "retcode": 200,
+    "msg": "查询成功",
+    "retlist": [
+      {
+        "id": 2,
+        "desc": "mod1",
+        "name": "测试模块1",
+        "create_time": "2021-03-25/10:31",
+        "update_time": "2021-03-25/10:35"
+      }
+    ]
+  }
+
+Environment:
+  {
+    "retcode": 200,
+    "msg": "\u67e5\u8be2\u6210\u529f",
+    "retlist": [
+      {
+        "id": 3,
+        "desc": "\u4e9a\u9a6c\u900a",
+        "ip": "192.168.1.100",
+        "port": 8080,
+        "category": 2,
+        "os": 2,
+        "status": 2,
+        "project": {
+          "id": 16,
+          "desc": "\u786c\u6838\u624b\u6e38",
+          "name": "\u81ea\u52a8\u5316\u5e73\u53f03"
+        },
+        "create_time": "2021-03-27/13:02",
+        "update_time": "2021-03-27/13:04"
+      }
+    ]
+  }
+
+Case:
+  {
+    "retcode": 200,
+    "msg": "\u67e5\u8be2\u6210\u529f",
+    "retlist": [
+      {
+        "id": 1,
+        "desc": "\u7a7a\u5bc6\u7801\u6d4b\u8bd5",
+        "status": true,
+        "create_time": "2021-03-27/06:59",
+        "update_time": "2021-03-30/10:07",
+        "module": {
+          "id": 2,
+          "desc": "mod1",
+          "project": 16,
+          "name": "\u6d4b\u8bd5\u6a21\u57571"
+        },
+        "steps": [
+          {
+            "id": 4,
+            "desc": "test",
+            "expected": "1",
+            "httpapi": 1,
+            "step_no": 1
+          },
+          {
+            "id": 5,
+            "desc": "test",
+            "expected": "1",
+            "httpapi": 1,
+            "step_no": 1
+          },
+        ],
+        "tags": [
+          {
+            "name": "smoke_test"
+          }
+        ]
+      }
+    ]
+  }
+
+Step:
+  {
+    'retcode': 200,
+    'msg': '查询成功',
+    'retlist': [
+      {
+        'id': 1,
+        'desc': 'mm1',
+        'expected': '123',
+        'step_no': 1,
+        'httpapi': 2,
+        'create_time': '2021-03-27/06:59',
+        'update_time': '2021-03-27/06:59',
+      }
+    ]
+  }
+HttpApi:
+  {
+    "retcode": 200,
+    "msg": "\u67e5\u8be2\u6210\u529f",
+    "retlist": [
+      {
+        "id": 3,
+        "method": 2,
+        "path": "/api/test2",
+        "data": "{\"user\":\"test\",\"psw\":\"123123\"}",
+        "content_type": 1,
+        "headers": "{\"Cache-Control\":\"no-cache\"}",
+        "auth_type": 1,
+        "desc": "\u6d4b\u8bd5\u63a5\u53e32",
+        "create_time": "2021-03-30/07:08",
+        "update_time": "2021-03-30/07:37",
+        "module": {
+          "id": 3,
+          "desc": "login",
+          "name": "\u767b\u5f55\u6a21\u5757"
+        }
+      }
+    ]
+  }
+
+Tag:
+  {
+    "retcode": 200,
+    "msg": "\u67e5\u8be2\u6210\u529f",
+    "retlist": [
+      {
+        "id": 4,
+        "name": "smoke_test",
+        "desc": "\u6d4b\u8bd5\u63a5\u53e32",
+        "create_time": "2021-03-30/07:31",
+        "update_time": "2021-03-30/07:31",
+      }
+    ]
+  }
+
+Plan:
+  {
+    "retcode": 200,
+    "retlist": [
+      {
+        "id": 16,
+        "name": "\u53ef\u53e3\u53ef\u4e50",
+        "desc": "cool",
+        "exec_counts": 0,
+        "status": 0,
+        "environment": {
+          "id": 1,
+          "desc": "\u4e9a\u9a6c\u900aES",
+          "project": 7,
+          "ip": "192.168.1.1",
+          "port": 8555,
+          "category": 0,
+          "os": 0,
+          "status": 0
+        },
+        "executor": null,
+        "project": {
+          "id": 7,
+          "name": "\u767e\u4e07\u5bcc\u7fc1"
+        },
+        "cases": [
+          {
+            "id": 5,
+            "desc": "\u5408\u540c\u65b0\u589e",
+            "sorted_by": 1,
+            "module_id": null,
+            "status": true,
+          }
+        ]
+      }
+    ]
+  }
+Result:
+  {
+      "retcode": 200,
+      "retlist": [
+          {
+              "id": 12,
+              "desc": null,
+              "plan": { "name": "\u98de\u9e70\u8ba1\u5212", "id":3},
+              "project": { "name": "star war","id":2},
+              "executor": 1,
+              "start_time": "2021-03-22/13:12:05",
+              "end_time": "2021-03-22/13:12:09",
+              "case_num": 1,
+              "pass_num": 0,
+              "failed_num": 1
+          }
+      ]
+  }
+User:
+  {
+      "retcode": 200,
+      "retlist": [
+          {
+            "date_joined": "2021-03-24T07:49:21.857Z",
+            "last_login": null,
+            "is_staff": false,
+            "is_active": true,
+            "username": "\u5c0f\u660e",
+            "first_name": "",
+            "id": 1,
+            "email": "",
+            "is_superuser": false
+          }
+      ]
+  }
