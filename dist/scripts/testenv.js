@@ -39,7 +39,6 @@ function repaint_envlist(result){
                 $('<td></td>').append($('<a></a>').text('编辑').addClass('btn btn-pill btn-sm btn-info').attr('href',`env_view.html?env_id=${res.id}`),
                 ),
             );
-
             $('.card-body tbody').append(tr) //添加数据
         }
     }

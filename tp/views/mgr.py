@@ -52,24 +52,24 @@ class ModuleHandler:
         position_keys = ['name', 'project_id']  # 必填参数列表
         # 选填参数
         option_keys = ['desc']
-        return CommonView.operate_add(request, Project, option_keys=option_keys, position_keys=position_keys)
+        return CommonView.operate_add(request, Module, option_keys=option_keys, position_keys=position_keys)
 
     @staticmethod
     def delete(request):
         # 获取删除对象id
         position_keys = ["id"]
-        return CommonView.operate_delete(request, Project, position_keys=position_keys)
+        return CommonView.operate_delete(request, Module, position_keys=position_keys)
 
     @staticmethod
     def update(request):
         # 选填参数
         option_keys = ['desc', 'project_id', 'name']
-        return CommonView.operate_update(request, Project, option_keys=option_keys)
+        return CommonView.operate_update(request, Module, option_keys=option_keys)
 
     @staticmethod
     def query(request):
         option_keys = ['project_id', 'name']
-        return CommonView.operate_query(request, Project, option_keys=option_keys)
+        return CommonView.operate_query(request, Module, option_keys=option_keys)
 
 
 # 环境增删改查

@@ -3,16 +3,16 @@
 import requests
 import pytest
 
-host = 'http://127.0.0.1:8000'
+host = 'http://127.0.0.1:8080'
 path = '/api/module/'
 
 
-@pytest.mark.skip()
+# @pytest.mark.skip()
 def test_add():
     url = host + path
     payload = {
         "name": "name11",
-        "project_id":6,
+        "project_id":62,
         'desc': "desc",
     }
     resp = requests.post(url, json=payload)
