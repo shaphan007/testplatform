@@ -57,8 +57,8 @@ class Environment(CommonInfo):
     )
 
     service_status = (
-        (0, 'active'),
-        (1, 'disable'),
+        (1, 'active'),
+        (0, 'disable'),
     )
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="所属项目")
     ip = models.GenericIPAddressField(default='127.0.0.1', verbose_name='ip地址')
@@ -69,7 +69,7 @@ class Environment(CommonInfo):
     # 操作系统
     os = models.SmallIntegerField(default=0, choices=service_os, verbose_name='操作系统')
     # 服务器状态
-    status = models.SmallIntegerField(default=0, choices=service_status, verbose_name='服务器状态')
+    status = models.SmallIntegerField(default=1, choices=service_status, verbose_name='服务器状态')
 
     class Meta(CommonInfo.Meta):
         verbose_name = "测试环境表"

@@ -224,7 +224,7 @@ const columns=[{
 
 function parse_status(value, row, index) {
     let span = $('<span></span>').addClass('badge')
-    if(value===0){
+    if(value===1){
         span.addClass('badge-success').text('active')
     }else {
         span.addClass('badge-dark').text('disable')
