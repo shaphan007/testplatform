@@ -125,7 +125,7 @@ function delete_httpapi(_id) {
 
 function addFunctionAlty(value, row, index) {
     return [
-        `<a id="edit" class="btn btn-pill btn-sm btn-info" href="case_view.html?case_id=${row.id}">查看</a>`,
+        `<a id="edit" class="btn btn-pill btn-sm btn-info" href="webinterface_view.html?api_id=${row.id}">查看</a>`,
         '<button id="delete" class="btn btn-pill btn-sm btn-danger" data-toggle="modal" data-target="#delete_modal">删除</button>',
     ].join('');
 }
