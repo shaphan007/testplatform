@@ -104,19 +104,81 @@ function webinterface_view(_id) {
         contentType: 'application/json; charset=utf-8',
         success: function (result, textStatus) {
             let httpapi = result.retlist[0];
+            //更新下拉列表--项目
+            common_attach('/api/project/', 'select[name="project"]', httpapi.module.project);
+            //更新下拉列表--模块
+            common_attach('/api/module/', 'select[name="module"]', httpapi.module.id);
+            //模块选择框关联项目选择
+             select_onchange('select[name="project"]', 'select[name="module"]', '/api/module/',);
             $('input[name="desc"]').val(httpapi.desc);  //更新描述
             $('input[name="path"]').val(httpapi.path);
             $('input[name="data"]').val(httpapi.data);
             $('input[name="headers"]').val(httpapi.headers);
-            //更新模块
-            target_selected('select[name="module"]',httpapi.module.id)
-            //更新请求方法
-            target_selected('select[name="method"]',httpapi.method)
+
         },
         error: function () {
             console.log('没找到哦');
         }
     });
+}
+
+//用户所关联项目
+function attach_projects(testcase) {
+  $.ajax({
+    type: 'get',
+    data: {},
+    url: '/api/project/',
+    contentType: 'application/json; charset=utf-8',
+    success: function (result, textStatus) {
+      let select_btn = $('select[name="project_id"]')
+      //清除原有option只保留默认
+      select_btn.children('option').remove()
+      select_btn.append('<option>选择项目</option>')
+      projects = result.retlist;
+      for (const project of projects) {
+        //重新关联项目列表
+        select_btn.append($('<option></option>').val(project.id).text(project.name));
+      }
+      //查看默认选项
+      select_btn.children('option').each(function () {
+        if ($(this).val() == testcase.module.project) {
+          $(this).attr('selected', '');
+        }
+      });
+    },
+    error: function () {
+      console.log('没找到哦');
+    }
+  });
+}
+//关联模块
+function attach_modules(testcase) {
+  $.ajax({
+    type: 'get',
+    data: {},
+    url: '/api/module/',
+    contentType: 'application/json; charset=utf-8',
+    success: function (result, textStatus) {
+      let select_btn = $('select[name="module_id"]')
+      //清除原有option只保留默认
+      select_btn.children('option').remove()
+      select_btn.append('<option>选择模块</option>')
+      items = result.retlist;
+      for (const item of items) {
+        //重新关联项目列表
+        select_btn.append($('<option></option>').val(item.id).text(item.name));
+      }
+      //查看默认选项
+      select_btn.children('option').each(function () {
+        if ($(this).val() == testcase.module.id) {
+          $(this).attr('selected', '');
+        }
+      });
+    },
+    error: function () {
+      console.log('没找到哦');
+    }
+  });
 }
 
 function delete_httpapi(_id) {
