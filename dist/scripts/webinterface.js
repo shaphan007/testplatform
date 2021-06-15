@@ -115,6 +115,8 @@ function webinterface_view(_id) {
             $('input[name="data"]').val(httpapi.data);
             $('input[name="headers"]').val(httpapi.headers);
             $('select[name="method"]').val(httpapi.method);
+            $('select[name="content_type"]').val(httpapi.content_type);
+            $('select[name="auth_type"]').val(httpapi.auth_type);
         },
         error: function () {
             console.log('没找到哦');
@@ -194,7 +196,10 @@ function update_httpapi(_id) {
   const module = $('select[name="module"] option:selected').val();
   let project = $('select[name="project"] option:selected').val();
 
-  let kwargs = {'desc': desc, 'method': method, 'path': path,'data':data ,'headers': headers,'module':module,'project':project}
+  const content_type = $('select[name="content_type"] option:selected').val();
+  const auth_type = $('select[name="auth_type"] option:selected').val();
+
+  let kwargs = {'desc': desc, 'method': method, 'path': path,'data':data ,'headers': headers,'module':module,'project':project,'content_type':content_type,'auth_type':auth_type}
   //提交信息
   $.ajax({
     type: 'put',
