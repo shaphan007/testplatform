@@ -82,6 +82,7 @@ class CommonView:
 
         # 选填参数
         info = info_handler(in_params, position_keys, option_keys)
+        print(f'参数：{info}')
         if not isinstance(info, dict):
             return info
         try:
@@ -100,7 +101,6 @@ class CommonView:
             for k, v in info.items():
                 mod_obj.__setattr__(k, v)  # object.__setattr__(属性名，属性值)
                 mod_obj.save()
-
             return JsonResponse({'retcode': 200, 'msg': "更新成功", 'id': mod_obj.id})
         except Exception as e:
             return JsonResponse({'retcode': 500, 'msg': "更新失败", 'error': repr(e)})

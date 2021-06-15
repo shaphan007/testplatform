@@ -114,12 +114,10 @@ class TagHandler:
 
 # 接口
 class HttpApiHandler:
-
     @staticmethod
     def add(request):
         position_keys = ['module_id', 'desc', 'method']
         option_keys = ['path', 'data', 'content_type', 'headers', 'auth_type']
-        print("新建http接口")
         return CommonView.operate_add(request, HttpApi, position_keys, option_keys)
 
     @staticmethod
@@ -129,8 +127,9 @@ class HttpApiHandler:
 
     @staticmethod
     def update(request):
+        print("更新接口")
         option_keys = ['module_id', 'desc', 'method', 'path', 'data', 'content_type',
-                       'auth_type']  # 循环的方式，不需要member_ids
+                       'auth_type','headers']  # 循环的方式，不需要member_ids
         return CommonView.operate_update(request, HttpApi, option_keys=option_keys)
 
     @staticmethod

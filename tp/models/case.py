@@ -1,5 +1,7 @@
 # coding=gbk
 from django.db import models
+
+
 from .base import CommonInfo
 from .pro import Module, Project
 

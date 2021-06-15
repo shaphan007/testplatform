@@ -114,7 +114,7 @@ function webinterface_view(_id) {
             $('input[name="path"]').val(httpapi.path);
             $('input[name="data"]').val(httpapi.data);
             $('input[name="headers"]').val(httpapi.headers);
-
+            $('select[name="method"]').val(httpapi.method);
         },
         error: function () {
             console.log('没找到哦');
@@ -180,6 +180,39 @@ function attach_modules(testcase) {
     }
   });
 }
+
+
+//提交接口信息修改
+function update_httpapi(_id) {
+  const  csrftoken = getCookie('csrftoken')
+  //获取信息
+  const desc = $('input[name="desc"]').val();
+  const method = $('select[name="method"] option:selected').val();
+  const path = $('input[name="path"]').val();
+  const data = $('input[name="data"]').val();
+  const headers = $('input[name="headers"]').val();
+  const module = $('select[name="module"] option:selected').val();
+  let project = $('select[name="project"] option:selected').val();
+
+  let kwargs = {'desc': desc, 'method': method, 'path': path,'data':data ,'headers': headers,'module':module,'project':project}
+  //提交信息
+  $.ajax({
+    type: 'put',
+    data: JSON.stringify(kwargs),
+    url: '/api/httpapi/?id='+_id,
+    contentType: 'application/json; charset=utf-8',
+    headers: {'X-CSRFToken': csrftoken},
+    success: function (result, TextStatus) {
+      console.log('success');
+      //返回测试用例列表
+      window.location.href='webinterface.html';
+    },
+    error: function (result, TextStatus) {
+      console.log('fail');
+    },
+  })
+}
+
 
 function delete_httpapi(_id) {
     return common_delete(_id,'/api/httpapi/')
