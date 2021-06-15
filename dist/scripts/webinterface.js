@@ -150,12 +150,14 @@ const columns= [{
 }, {
     title: '请求方法',
     field: 'method',
+    formatter: parse_method,
 }, {
     title: '请求路径',
     field: 'path',
 },{
     title: '数据类型',
     field: 'content_type',
+    formatter: parse_content_type,
 },{
     title: '参数',
     field: 'data',
@@ -180,3 +182,30 @@ const columns= [{
 ];
 
 
+function parse_method(value, row, index) {
+    let span = $('<span></span>').addClass('badge')
+    if(value===0){
+        span.text('GET').addClass('badge-info')
+    }else if(value===1){
+        span.text('POST').addClass('badge-info')
+    }else if(value===2){
+        span.text('PUT').addClass('badge-info')
+    }
+    else if(value===3){
+        span.text('DELETE').addClass('badge-info')
+    }else {
+        span.text('unknown').addClass('badge-dark')
+    }
+    return span.prop("outerHTML")  //返回html内容
+}
+function parse_content_type(value, row, index) {
+    let span = $('<span></span>').addClass('badge')
+    if(value===0){
+        span.text('application/json').addClass('badge-info')
+    }else if(value===1){
+        span.text('application/x-www-form-urlencoded').addClass('badge-info')
+    }else {
+        span.text('unknown').addClass('badge-dark')
+    }
+    return span.prop("outerHTML")  //返回html内容
+}
