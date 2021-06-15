@@ -1,7 +1,8 @@
 # coding=gbk
 from django.db import models
 from .base import CommonInfo
-from .pro import Module
+from .pro import Module, Project
+
 
 # 测试用例表
 class Case(CommonInfo):
@@ -10,6 +11,7 @@ class Case(CommonInfo):
         (False, 'disable'),
     )
     module = models.ForeignKey(Module, on_delete=models.SET_NULL, null=True, verbose_name="关联模块")
+    project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, verbose_name="关联项目")
     tags = models.ManyToManyField('Tag', verbose_name='用例标签')  # 多对多关系
 
     # 状态

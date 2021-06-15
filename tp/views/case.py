@@ -11,9 +11,9 @@ from ..plugins.task_runner import plan_run
 class CaseHandler:
     @staticmethod
     def add(request):
-        position_keys = ['desc', 'module_id']  # 必填参数列表
+        position_keys = ['desc', 'module_id', 'project_id']  # 必填参数列表
         option_keys = ['status', 'tag_ids']
-        return CommonView.operate_add(request, Case, position_keys, option_keys)
+        return CommonView.operate_add(request, Case, position_keys=position_keys, option_keys=option_keys)
 
     @staticmethod
     def delete(request):
@@ -24,7 +24,7 @@ class CaseHandler:
     @staticmethod
     # 修改
     def update(request):
-        option_keys = ['desc', 'module_id', 'status', 'tag_ids']  # 非必填参数列表
+        option_keys = ['desc', 'module_id', 'status', 'tag_ids', 'project_id']  # 非必填参数列表
         return CommonView.operate_update(request, Case, option_keys=option_keys)
 
     @staticmethod
@@ -138,34 +138,6 @@ class HttpApiHandler:
         # 3.选填参数
         option_keys = ['id', 'module_id']
         return CommonView.operate_query(request, HttpApi, option_keys=option_keys)
-
-
-# 用例
-class CaseHandler:
-    @staticmethod
-    def add(request):
-        # 必填参数
-        position_keys = ['desc', 'module_id']
-        # 选填参数
-        option_keys = ['status']
-        return CommonView.operate_add(request, position_keys=position_keys, option_keys=option_keys, db_model=Case)
-
-    @staticmethod
-    def delete(request):
-        position_keys = ['id']
-        return CommonView.operate_delete(request, Case, position_keys=position_keys)
-
-    @staticmethod
-    def update(request):
-        # 3.收集参数
-        option_keys = ['desc', 'status', 'module_id']  # 循环的方式，不需要member_ids
-        return CommonView.operate_update(request, option_keys=option_keys, db_model=Case)
-
-    @staticmethod
-    def query(request):
-        # 3.选填参数
-        option_keys = ['id', 'module_id']
-        return CommonView.operate_query(request, option_keys=option_keys, db_model=Case)
 
 
 # 步骤

@@ -13,8 +13,10 @@ from tp.models import Tag, Case
 def info_handler(in_params, position_keys=None, option_keys=None):
     info = {}
     # 必填参数
+    print(f'必填关键字：{position_keys}')
     if position_keys is not None:
         for key in position_keys:
+            print(f'必填关键字：{key}')
             if key not in in_params and not key.endswith('_ids'):
                 return JsonResponse({'retcode': 500, 'msg': "必填参数为空", 'error': f"{key}为必填参数不能为空"})
             info[key] = in_params[key]
@@ -36,7 +38,7 @@ def filter_query(resp_tmp, query_obj):
     item = {}
     for k, v in item_dict.items():
         if isinstance(v, dict):
-            print(f'处理字典:{k}')
+            # print(f'处理字典:{k}')
             if hasattr(query_obj, k) and getattr(query_obj, k):
                 item[k] = model_to_dict(getattr(query_obj, k),
                                         fields=v.keys())  # 对应的字段getattr(query_obj, k)  例如：project.admin
@@ -46,18 +48,18 @@ def filter_query(resp_tmp, query_obj):
         elif isinstance(v, list):
             fields = v[0].keys()
             print(fields)
-            print(f"列表数据查询:{k}")
+            # print(f"列表数据查询:{k}")
             if hasattr(query_obj, k):
-                print("反向查询")
+                # print("反向查询")
                 # item['member'] = list(project.members.all().values('id', 'username', 'email', 'first_name'))
                 item[k] = list(getattr(query_obj, k).all().values(*fields))
             else:
-                print("正向查询")
+                # print("正向查询")
                 # item['modules'] = list(project.module_set.all().values('id', 'name', 'desc'))
                 item[k] = list(getattr(query_obj, k[0:-1] + '_set').values(*fields))
-            print(item[k])
+            # print(item[k])
         else:
-            print(f"开始处理普通类型数据{k}")
+            # print(f"开始处理普通类型数据{k}")
             # 判断value 是否为对应的外键 -- 判断类型是否为model
             value = getattr(query_obj, k)
             if isinstance(value, Model):
@@ -67,6 +69,6 @@ def filter_query(resp_tmp, query_obj):
                 item[k] = value.strftime('%Y-%m-%d/%H:%M')
             else:
                 item[k] = value
-            print(item[k])
-    print(item)
+            # print(item[k])
+    # print(item)
     return item

@@ -35,7 +35,9 @@ class CommonView:
     def operate_add(request, db_model, position_keys=None, option_keys=None):
         # 多对多关系字典
         in_params = json.loads(request.body)
-        info = info_handler(in_params, position_keys, option_keys)  # 返回一个字典
+        print(f"add入参：{in_params}")
+        info = info_handler(in_params, position_keys=position_keys, option_keys=option_keys)  # 返回一个字典
+        print(f"add出参：{info}")
         if not isinstance(info, dict):  # 判断返回的是否是字典
             return info  # 返回的为JsonResponse
         try:
