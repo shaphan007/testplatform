@@ -44,6 +44,7 @@ class CommonView:
         try:
             with transaction.atomic():  # 添加事务回滚
                 # 模型数据对象
+                info['created_by'] = request.user  # 添加当前用户为创建者
                 mod_obj = db_model.objects.create(**info)
                 # 多对多关联
                 for key in in_params:
@@ -101,7 +102,8 @@ class CommonView:
                     m2m_field.add(*objs)
             for k, v in info.items():
                 mod_obj.__setattr__(k, v)  # object.__setattr__(属性名，属性值)
-                mod_obj.save()
+            mod_obj.update_by = request.user  # 添加更新者信息
+            mod_obj.save()
             return JsonResponse({'retcode': 200, 'msg': "更新成功", 'id': mod_obj.id})
         except Exception as e:
             return JsonResponse({'retcode': 500, 'msg': "更新失败", 'error': repr(e)})
@@ -110,6 +112,10 @@ class CommonView:
     def operate_query(request, db_model, position_keys=None, option_keys=None):
         in_params = request.GET
         info = info_handler(in_params, option_keys=option_keys)
+        if db_model == Tag:
+            # 判断入参是否有case_id
+            if 'case_id' in info:
+                info['case'] = info.pop('case_id')
         try:
             retlist = []
             # 获取分页数据-- page_index,page_size

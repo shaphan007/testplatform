@@ -102,6 +102,7 @@ def plan_run(request):
     target_plan.save()
     # 循环执行计划中的用例
     case_list = target_plan.cases.all()
+    # 用例执行情况
     case_num = case_list.count()
     pass_num = 0
     failed_num = 0
@@ -117,8 +118,11 @@ def plan_run(request):
     target_plan.status = StatusConf.plan_status.done
     # 记录计划执行次数
     target_plan.exec_counts += 1
+    # 测试人员
+    target_plan.executor = request.user
+    target_plan.save()
     # 测试完成 -保存本次测试结果到 result
     Result.objects.create(plan=target_plan, start_time=start_time, end_time=end_time, case_num=case_num,
-                          pass_num=pass_num, failed_num=failed_num)
+                          pass_num=pass_num, failed_num=failed_num, executor=request.user)
     return {'recode': 200, 'msg': '运行结束', 'status': target_plan.status, 'case_num': case_num, 'pass_num': pass_num,
             'failed_num': failed_num}

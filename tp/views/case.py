@@ -48,7 +48,7 @@ class PlanHandler:
 
     @staticmethod
     def update(request):
-        option_keys = ['name', 'environment_id', 'desc', 'status', 'case_ids']
+        option_keys = ['name', 'environment_id', 'desc', 'case_ids', 'project_id']
         return CommonView.operate_update(request, Plan, option_keys=option_keys)
 
     @staticmethod
