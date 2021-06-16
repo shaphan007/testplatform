@@ -32,7 +32,7 @@ function repaint_planlist(result){
             //创建行内容
             tr.append($('<td></td>').text(res.id),
                 $('<td></td>').text(res.name),
-                $('<td></td>').text(res.project?res.project.name:'N/A'),
+                $('<td></td>').text(res.project?res.environment.project:'N/A'),
                 $('<td></td>').text(res.executor?res.executor.username:'N/A'),
                 $('<td></td>').text(res.environment?res.environment.desc:'N/A'),
                 $('<td></td>').text(res.status),
@@ -87,7 +87,7 @@ function new_plan(){
     //提交
     $.ajax({
         type: 'post',
-        data: JSON.stringify({'desc':desc,'name':name,'environment_id':env_id,'executor_id':'2','status':status}),
+        data: JSON.stringify({'desc':desc,'name':name,'environment_id':env_id,'executor_id':'2','status':status,'project_id':project_id}),
         url: '/api/plan/',
         cache: false,
         contentType: 'application/json; charset=utf-8',
@@ -181,6 +181,7 @@ function update_testplan(id) {
     const name = $('input[name="name"]').val();
     const desc = $('input[name="desc"]').val();
     const env_id = $('select[name="env_id"] option:selected').val();
+    const project_id = $('select[name="project_id"] option:selected').val();
     let cases = []
     $('select[name="case_id"] option:selected').each(function () {
         cases.push($(this).val())
@@ -189,13 +190,14 @@ function update_testplan(id) {
     //提交信息
     $.ajax({
         type: 'put',
-        data: JSON.stringify({'name':name,'desc':desc,'environment_id':env_id,'case_ids':cases}),
+        data: JSON.stringify({'name':name,'desc':desc,'environment_id':env_id,'case_ids':cases,'project_id':project_id}),
         url: '/api/plan/?id='+id,
         cache: false,
         contentType: 'application/json; charset=utf-8',
         headers: {'X-CSRFToken': csrftoken},
         success: function (result,TextStatus){
             console.log('success')
+            console.log(result)
             //返回计划列表页面
             window.location.href='testplan.html'
         },

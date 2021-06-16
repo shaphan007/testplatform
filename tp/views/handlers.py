@@ -1,5 +1,6 @@
 # coding=gbk
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.db import transaction
 import json
 from django.db.models import Model
@@ -111,12 +112,21 @@ class CommonView:
         info = info_handler(in_params, option_keys=option_keys)
         try:
             retlist = []
-            query_list = db_model.objects.filter(**info)  # 查询数据库对应条件的数据
-            resp_tmp = read_yaml('tp/query_resp_temp.yml')[db_model.__name__]  # 读取返回数据模板
-            for query_obj in query_list:
+            # 获取分页数据-- page_index,page_size
+            page_index = in_params.get('page_index', 1)
+            page_size = in_params.get('page_size', 5)
+            # 初始化分页器对象
+            paginator = Paginator(list(db_model.objects.filter(**info)), page_size)
+            # 根据页码提供当前页的内容
+            queryset = paginator.get_page(page_index)
+
+            # query_list = db_model.objects.filter(**info)  # 查询数据库对应条件的数据
+            # for query_obj in query_list:
+            for query_obj in queryset:
                 # 根据响应模板判断响应参数类型，从而做具体处理
+                resp_tmp = read_yaml('tp/query_resp_temp.yml')[db_model.__name__]  # 读取返回数据模板
                 item = filter_query(resp_tmp, query_obj)  # 整合数据
                 retlist.append(item)
-            return JsonResponse({'retcode': 200, 'msg': "查询成功", 'retlist': retlist})
+            return JsonResponse({'retcode': 200, 'msg': "查询成功", 'retlist': retlist, 'total': paginator.count})
         except Exception as e:
             return JsonResponse({'retcode': 500, 'msg': "查询失败", 'error': repr(e)})

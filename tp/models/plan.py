@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from .base import CommonInfo
 from .case import Case
-from .pro import Environment
+from .pro import Environment, Project
 
 
 # 测试计划
@@ -20,6 +20,7 @@ class Plan(CommonInfo):
     executor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="执行人")
     # env
     environment = models.ForeignKey(Environment, on_delete=models.SET_NULL, null=True, verbose_name="测试环境")
+    project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, verbose_name="项目")
     # 计划名称
     name = models.CharField(max_length=32, verbose_name="测试计划", unique=True)
     # 计划执行状态

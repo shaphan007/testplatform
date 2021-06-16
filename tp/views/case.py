@@ -37,8 +37,8 @@ class CaseHandler:
 class PlanHandler:
     @staticmethod
     def add(request):
-        position_keys = ['name', 'environment_id']  # 必填参数
-        option_keys = ['desc', 'status', 'case_ids']  # 选填参数
+        position_keys = ['name', 'environment_id', 'project_id']  # 必填参数
+        option_keys = ['desc', 'case_ids']  # 选填参数
         return CommonView.operate_add(request, Plan, position_keys, option_keys)
 
     @staticmethod
@@ -129,7 +129,7 @@ class HttpApiHandler:
     def update(request):
         print("更新接口")
         option_keys = ['module_id', 'desc', 'method', 'path', 'data', 'content_type',
-                       'auth_type','headers']  # 循环的方式，不需要member_ids
+                       'auth_type', 'headers']  # 循环的方式，不需要member_ids
         return CommonView.operate_update(request, HttpApi, option_keys=option_keys)
 
     @staticmethod
