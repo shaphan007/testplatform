@@ -89,6 +89,7 @@ class CommonView:
             return info
         try:
             mod_obj = db_model.objects.get(pk=_id)
+            print(mod_obj)
             for key in in_params:
                 if key.endswith('_ids') and isinstance(in_params[key], list):  # 判断是否以_ids 结尾 & 为list类型
                     M = M2M_dict[key]

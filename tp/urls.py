@@ -20,7 +20,7 @@ from .views import dispatcher_case
 from .views import dispatcher_httpapi, dispatcher_result, dispatcher_run, dispatcher_plan, \
     dispatcher_step
 from .views import dispatcher_tag
-from .views import login, logout, register, current_user, query_user
+from .views import login, logout, register, current_user, dispatcher_user
 
 urlpatterns = [
     path('project/', dispatcher_project),
@@ -42,5 +42,5 @@ urlpatterns = [
     path('user/logout/', logout),
     path('user/register/', register),
     path('user/current/', current_user),
-    path('user/list/', query_user),
+    path('user/list/', dispatcher_user),
 ]

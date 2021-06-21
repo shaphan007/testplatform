@@ -20,11 +20,13 @@ def info_handler(in_params, position_keys=None, option_keys=None):
             if key not in in_params and not key.endswith('_ids'):
                 return JsonResponse({'retcode': 500, 'msg': "必填参数为空", 'error': f"{key}为必填参数不能为空"})
             info[key] = in_params[key]
+
     # 选填参数
     if option_keys is not None:
         for key in option_keys:
             if key in in_params and not key.endswith('_ids'):
                 info[key] = in_params[key]
+
     return info
 
 

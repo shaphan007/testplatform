@@ -142,31 +142,36 @@ function repaint_plan_view(result) {
     //环境选择框关联项目选择
     select_onchange('select[name="project_id"]', 'select[name="env_id"]', '/api/env/',);
 
-
     //拷贝例行模板
-    let row_temp = $('.card-footer tbody tr:nth-last-child(1)');
-    //测试用例刷新
+    let row_temp = $('.card-footer tbody tr:nth-last-child(1)');  // ?????
+    //
+//            //新增一行测试用例刷新
     if (plan.cases.length > 0) {
         console.log('update caselist')
         //删除所有行
         $('.card-footer tbody tr').each(function () {
             $(this).remove();
         });
+
         for (let testcase of plan.cases) {
-            //新增一行
+            let testcase = plan.cases[0]
             $('.card-footer tbody').append(row_temp[0].outerHTML);
+            // 序号填充
+//            $('.card-footer tbody tr:nth-last-child(1) h5').text(i+1)
             //填充模块
             common_attach('/api/module/', '.card-footer tbody tr:nth-last-child(1) select[name="module_id"]',
               testcase.module_id, {'project_id': plan.environment.project});
               //模块选择框关联项目选择
-             select_onchange('select[name="project_id"]', 'select[name="module_id"]', '/api/module/',);
+//             select_onchange('select[name="project_id"]', 'select[name="module_id"]', '/api/module/',);
             //填充用例
             common_attach('/api/case/', '.card-footer tbody tr:nth-last-child(1) select[name="case_id"]',
               testcase.id, {'module_id': testcase.module_id});
+
+            //case选择框关联模块选择
+             select_onchange('select[name="module_id"]', 'select[name="case_id"]', '/api/case/',);
             //填充描述
             $('.card-footer tbody tr:nth-last-child(1) input[name="case_desc"]').val(testcase.desc);
         }
-
     } else {
         //更新模块下拉
         common_attach('/api/module/', 'select[name="module_id"]', plan.environment.project);
@@ -301,3 +306,6 @@ function parse_status(value, row, index) {
     }
     return span.prop("outerHTML")  //返回html内容
 }
+
+
+
