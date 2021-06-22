@@ -44,9 +44,87 @@ function repaint_userlist(result){
 }
 function addFunctionAlty(value, row, index) {
     return [
-        `<a id="edit" class="btn btn-pill btn-sm btn-info" href="user_view.html?case_id=${row.id}">查看</a>`,
+        `<a id="edit" class="btn btn-pill btn-sm btn-info" href="user_view.html?user_id=${row.id}">查看</a>`,
         '<button id="delete" class="btn btn-pill btn-sm btn-danger" data-toggle="modal" data-target="#delete_modal">删除</button>',
     ].join('');
+};
+
+
+//plan详情页面
+function user_view(user_id){
+    $.ajax({
+        type: 'get',
+        data: {'id':user_id},
+        url: '/api/user/list/',
+        async: true,
+        contentType: 'application/json; charset=utf-8',
+        success:function (result, textStatus) {
+            if(result.retcode===200){
+                repaint_user_view(result);
+            }else if(result.retcode===403){
+                console.log('未登录,开始重定向')
+                location.href = result.to
+            }
+        },
+        error:function (){
+            console.log('没找到哦');
+        }
+    });
+    //绑定修改按钮点击方法---提交修改
+    $('[type="submit"]').click(function () {
+        update_user(user_id);
+    })
+}
+//提交修改
+function update_user(_id) {
+    const csrftoken = getCookie('csrftoken'); //从cookie获取django的crsftoken
+    //获取信息
+    let username= $('[name="username"]').val();
+    let first_name = $('[name="first_name"]').val();
+    let email = $('[name="email"]').val();
+    let str = $('[name="is_superuser"] option:selected').val();
+    let is_superuser = str.replace(str[0],str[0].toUpperCase());
+    let str1 = $('[name="is_active"] option:selected').val();
+    let is_active = str1.replace(str1[0],str1[0].toUpperCase());
+
+    let payload = {'username':username,'first_name':first_name,'email':email,'is_superuser':is_superuser,'is_active':is_active}
+    //提交信息
+    $.ajax({
+        type: 'put',
+        data: JSON.stringify(payload),
+        url: '/api/user/list/?id='+_id,
+        contentType: 'application/json; charset=utf-8',
+        headers: {'X-CSRFToken': csrftoken},
+        success: function (result,TextStatus){
+            console.log('success')
+            //返回列表页面
+            window.location.href='users.html'
+        },
+        error:function (result,TextStatus){
+            console.log('fail'+result.msg)
+        },
+    });
+    //绑定修改按钮点击方法---提交修改
+    $('[type="submit"]').click(function () {
+        update_user(_id);
+    })
+}
+
+
+function repaint_user_view(result) {
+    let user = result.retlist[0];
+    $('input[name="username"]').val(user.username);
+    $('input[name="first_name"]').val(user.first_name);
+
+    $('input[name="email"]').val(user.email);
+
+
+    target_selected('select[name="is_superuser"]',user.is_superuser);
+    target_selected('select[name="is_active"]',user.is_active);
+}
+
+function delete_user(_id) {
+    return common_delete(_id,'/api/user/list/')
 }
 
 let operateEvents = {
@@ -54,11 +132,13 @@ let operateEvents = {
     },'click #delete': function (e, value, row, index) {
         function to_delete_item() {
             console.log('delete,row: '+row.id);
+             delete_user(row.id)
 
         }
         $('.modal-footer .btn-danger').unbind('click').click(to_delete_item);
     },
 };
+
 
 const columns=[{
     checkbox: true

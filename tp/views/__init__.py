@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 from .mgr import ProjectHandler, ModuleHandler, EnvHandler
 from .case import CaseHandler, PlanHandler, ResultHandler, StepHandler, HttpApiHandler, TagHandler
-from .accout import login, logout, register, current_user, query_user
+from .accout import login, logout, register, current_user, UserHandler
 
 
 def _common_dispatcher(request, Handler):
@@ -19,11 +19,11 @@ def _common_dispatcher(request, Handler):
 
 
 # 返回指定视图
-@login_required
+
 def dispatcher_project(request):
     return _common_dispatcher(request, ProjectHandler)
 
-
+@login_required
 def dispatcher_module(request):
     return _common_dispatcher(request, ModuleHandler)
 
@@ -59,3 +59,6 @@ def dispatcher_run(request):
 
 def dispatcher_result(request):
     return _common_dispatcher(request, ResultHandler)
+
+def dispatcher_user(request):
+    return _common_dispatcher(request, UserHandler)

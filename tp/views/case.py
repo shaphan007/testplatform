@@ -11,9 +11,9 @@ from ..plugins.task_runner import plan_run
 class CaseHandler:
     @staticmethod
     def add(request):
-        position_keys = ['desc', 'module_id']  # 必填参数列表
+        position_keys = ['desc', 'module_id', 'project_id']  # 必填参数列表
         option_keys = ['status', 'tag_ids']
-        return CommonView.operate_add(request, Case, position_keys, option_keys)
+        return CommonView.operate_add(request, Case, position_keys=position_keys, option_keys=option_keys)
 
     @staticmethod
     def delete(request):
@@ -24,7 +24,7 @@ class CaseHandler:
     @staticmethod
     # 修改
     def update(request):
-        option_keys = ['desc', 'module_id', 'status', 'tag_ids']  # 非必填参数列表
+        option_keys = ['desc', 'module_id', 'status', 'tag_ids', 'project_id']  # 非必填参数列表
         return CommonView.operate_update(request, Case, option_keys=option_keys)
 
     @staticmethod
@@ -37,8 +37,8 @@ class CaseHandler:
 class PlanHandler:
     @staticmethod
     def add(request):
-        position_keys = ['name', 'environment_id']  # 必填参数
-        option_keys = ['desc', 'status', 'case_ids']  # 选填参数
+        position_keys = ['name', 'environment_id', 'project_id']  # 必填参数
+        option_keys = ['desc', 'case_ids']  # 选填参数
         return CommonView.operate_add(request, Plan, position_keys, option_keys)
 
     @staticmethod
@@ -48,7 +48,7 @@ class PlanHandler:
 
     @staticmethod
     def update(request):
-        option_keys = ['name', 'environment_id', 'desc', 'status', 'case_ids']
+        option_keys = ['name', 'environment_id', 'desc', 'case_ids', 'project_id']
         return CommonView.operate_update(request, Plan, option_keys=option_keys)
 
     @staticmethod
@@ -114,12 +114,10 @@ class TagHandler:
 
 # 接口
 class HttpApiHandler:
-
     @staticmethod
     def add(request):
         position_keys = ['module_id', 'desc', 'method']
         option_keys = ['path', 'data', 'content_type', 'headers', 'auth_type']
-        print("新建http接口")
         return CommonView.operate_add(request, HttpApi, position_keys, option_keys)
 
     @staticmethod
@@ -129,8 +127,9 @@ class HttpApiHandler:
 
     @staticmethod
     def update(request):
+        print("更新接口")
         option_keys = ['module_id', 'desc', 'method', 'path', 'data', 'content_type',
-                       'auth_type']  # 循环的方式，不需要member_ids
+                       'auth_type', 'headers']  # 循环的方式，不需要member_ids
         return CommonView.operate_update(request, HttpApi, option_keys=option_keys)
 
     @staticmethod
@@ -138,34 +137,6 @@ class HttpApiHandler:
         # 3.选填参数
         option_keys = ['id', 'module_id']
         return CommonView.operate_query(request, HttpApi, option_keys=option_keys)
-
-
-# 用例
-class CaseHandler:
-    @staticmethod
-    def add(request):
-        # 必填参数
-        position_keys = ['desc', 'module_id']
-        # 选填参数
-        option_keys = ['status']
-        return CommonView.operate_add(request, position_keys=position_keys, option_keys=option_keys, db_model=Case)
-
-    @staticmethod
-    def delete(request):
-        position_keys = ['id']
-        return CommonView.operate_delete(request, Case, position_keys=position_keys)
-
-    @staticmethod
-    def update(request):
-        # 3.收集参数
-        option_keys = ['desc', 'status', 'module_id']  # 循环的方式，不需要member_ids
-        return CommonView.operate_update(request, option_keys=option_keys, db_model=Case)
-
-    @staticmethod
-    def query(request):
-        # 3.选填参数
-        option_keys = ['id', 'module_id']
-        return CommonView.operate_query(request, option_keys=option_keys, db_model=Case)
 
 
 # 步骤

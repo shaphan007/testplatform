@@ -3,7 +3,7 @@
 import requests
 import pytest
 
-host = 'http://127.0.0.1:8000'
+host = 'http://127.0.0.1:8080'
 path = '/api/module/'
 
 
@@ -12,7 +12,7 @@ def test_add():
     url = host + path
     payload = {
         "name": "name11",
-        "project_id":6,
+        "project_id":62,
         'desc': "desc",
     }
     resp = requests.post(url, json=payload)
@@ -28,7 +28,7 @@ def test_delete():
 # @pytest.mark.skip()
 def test_query():
     url = host + path
-    resp = requests.get(url, params={'project_id': 6 })
+    resp = requests.get(url, params={'project_id': 62 })
     print(resp.json())
 
 

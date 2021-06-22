@@ -18,7 +18,7 @@ class StatusConf:
         running = 1
         breaked = 2
         success = 3
-        falied = 4
+        failed = 4
         error = 5
 
     class plan_status:

@@ -97,6 +97,18 @@ def current_user(request):
         return JsonResponse({'retcode': 403, 'to': 'login.html', 'msg': 'Î´µÇÂ¼£¡'})
 
 
-def query_user(request):
-    option_keys = ['id', 'name']
-    return CommonView.operate_query(request, User, option_keys=option_keys)
+class UserHandler:
+    @staticmethod
+    def query(request):
+        option_keys = ['id', 'name']
+        return CommonView.operate_query(request, User, position_keys=None, option_keys=option_keys)
+
+    @staticmethod
+    def update(request):
+        option_keys = ['email', 'first_name', 'is_active', 'is_superuser', 'username']
+        return CommonView.operate_update(request, User, option_keys=option_keys)
+
+    @staticmethod
+    def delete(request):
+        position_keys = ['id']
+        return CommonView.operate_delete(request, User, position_keys=position_keys)

@@ -34,7 +34,7 @@ function repaint_caselist(result) {
       //创建行内容
       tr.append($('<td></td>').text(res.id),
         $('<td></td>').text(res.desc),
-        $('<td></td>').text(res.module.project),
+        $('<td></td>').text(res.project.name),
         $('<td></td>').text(res.module.name),
         $('<td></td>').append($('<span></span>').text(res.status).addClass('badge').addClass(res.status ? 'badge-success' : 'badge-dark')),
         $('<td></td>').text(taglist.join(',')),
@@ -255,8 +255,9 @@ function update_case(_id) {
   const desc = $('input[name="desc"]').val();
   const status = $('.c-switch-input[name="status"]').prop("checked");
   const module = $('select[name="module_id"] option:selected').val();
+  let project_id = $('select[name="project_id"] option:selected').val();
   let steps = table_data(0, 5);  // 从序号到测试步骤
-  let kwargs = {'desc': desc, 'status': status, 'moudle_id': module, 'step_list': steps}
+  let kwargs = {'desc': desc, 'status': status, 'moudle_id': module,'project_id':project_id ,'step_list': steps}
   //提交信息
   $.ajax({
     type: 'put',
@@ -287,11 +288,12 @@ function new_case() {
   const csrftoken = getCookie('csrftoken');
   //收集数据
   let module_id = $('select[name="module_id"] option:selected').val();
+  let project_id = $('select[name="project_id"] option:selected').val();
   let desc = $('input[name="desc"]').val();
   //提交
   $.ajax({
     type: 'post',
-    data: JSON.stringify({'desc': desc, 'module_id': module_id}),
+    data: JSON.stringify({'desc': desc, 'module_id': module_id,'project_id':project_id}),
     url: '/api/case/',
     cache: false,
     contentType: 'application/json; charset=utf-8',
@@ -340,7 +342,7 @@ const columns= [{
   field: 'desc',
 }, {
   title: '项目',
-  field: 'module.project',
+  field: 'project.name',
 },{
   title: '模块',
   field: 'module.name',

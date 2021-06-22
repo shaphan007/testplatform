@@ -21,7 +21,7 @@ auto_now:更新数据自动添加时间
 class CommonInfo(models.Model):
     # 创建时间
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
-    create_by = models.ForeignKey(User, null=True, blank=True, verbose_name='创建者', on_delete=models.SET_NULL,
+    created_by = models.ForeignKey(User, null=True, blank=True, verbose_name='创建者', on_delete=models.SET_NULL,
                                   related_name='%(class)s_create_by')
 
     update_time = models.DateTimeField(auto_now=True, verbose_name="更新时间", null=True)

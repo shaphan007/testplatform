@@ -32,7 +32,7 @@ function repaint_planlist(result){
             //创建行内容
             tr.append($('<td></td>').text(res.id),
                 $('<td></td>').text(res.name),
-                $('<td></td>').text(res.project?res.project.name:'N/A'),
+                $('<td></td>').text(res.project?res.environment.project:'N/A'),
                 $('<td></td>').text(res.executor?res.executor.username:'N/A'),
                 $('<td></td>').text(res.environment?res.environment.desc:'N/A'),
                 $('<td></td>').text(res.status),
@@ -87,7 +87,7 @@ function new_plan(){
     //提交
     $.ajax({
         type: 'post',
-        data: JSON.stringify({'desc':desc,'name':name,'environment_id':env_id,'executor_id':'2','status':status}),
+        data: JSON.stringify({'desc':desc,'name':name,'environment_id':env_id,'executor_id':'2','status':status,'project_id':project_id}),
         url: '/api/plan/',
         cache: false,
         contentType: 'application/json; charset=utf-8',
@@ -143,26 +143,34 @@ function repaint_plan_view(result) {
     select_onchange('select[name="project_id"]', 'select[name="env_id"]', '/api/env/',);
 
     //拷贝例行模板
-    let row_temp = $('.card-footer tbody tr:nth-last-child(1)');
-    //测试用例刷新
+    let row_temp = $('.card-footer tbody tr:nth-last-child(1)');  // ?????
+    //
+//            //新增一行测试用例刷新
     if (plan.cases.length > 0) {
         console.log('update caselist')
         //删除所有行
         $('.card-footer tbody tr').each(function () {
             $(this).remove();
         });
+
         for (let testcase of plan.cases) {
-            //新增一行
+            let testcase = plan.cases[0]
             $('.card-footer tbody').append(row_temp[0].outerHTML);
+            // 序号填充
+//            $('.card-footer tbody tr:nth-last-child(1) h5').text(i+1)
             //填充模块
-            common_attach('/api/module/', 'tr:nth-last-child(1) select[name="module_id"]',
+            common_attach('/api/module/', '.card-footer tbody tr:nth-last-child(1) select[name="module_id"]',
               testcase.module_id, {'project_id': plan.environment.project});
+              //模块选择框关联项目选择
+//             select_onchange('select[name="project_id"]', 'select[name="module_id"]', '/api/module/',);
             //填充用例
-            common_attach('/api/case/', 'tr:nth-last-child(1) select[name="case_id"]',
+            common_attach('/api/case/', '.card-footer tbody tr:nth-last-child(1) select[name="case_id"]',
               testcase.id, {'module_id': testcase.module_id});
+
+            //case选择框关联模块选择
+             select_onchange('select[name="module_id"]', 'select[name="case_id"]', '/api/case/',);
             //填充描述
             $('.card-footer tbody tr:nth-last-child(1) input[name="case_desc"]').val(testcase.desc);
-
         }
     } else {
         //更新模块下拉
@@ -181,6 +189,7 @@ function update_testplan(id) {
     const name = $('input[name="name"]').val();
     const desc = $('input[name="desc"]').val();
     const env_id = $('select[name="env_id"] option:selected').val();
+    const project_id = $('select[name="project_id"] option:selected').val();
     let cases = []
     $('select[name="case_id"] option:selected').each(function () {
         cases.push($(this).val())
@@ -189,13 +198,14 @@ function update_testplan(id) {
     //提交信息
     $.ajax({
         type: 'put',
-        data: JSON.stringify({'name':name,'desc':desc,'environment_id':env_id,'case_ids':cases}),
+        data: JSON.stringify({'name':name,'desc':desc,'environment_id':env_id,'case_ids':cases,'project_id':project_id}),
         url: '/api/plan/?id='+id,
         cache: false,
         contentType: 'application/json; charset=utf-8',
         headers: {'X-CSRFToken': csrftoken},
         success: function (result,TextStatus){
             console.log('success')
+            console.log(result)
             //返回计划列表页面
             window.location.href='testplan.html'
         },
@@ -296,3 +306,6 @@ function parse_status(value, row, index) {
     }
     return span.prop("outerHTML")  //返回html内容
 }
+
+
+
