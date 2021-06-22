@@ -19,11 +19,11 @@ def _common_dispatcher(request, Handler):
 
 
 # 返回指定视图
-@login_required
+
 def dispatcher_project(request):
     return _common_dispatcher(request, ProjectHandler)
 
-
+@login_required
 def dispatcher_module(request):
     return _common_dispatcher(request, ModuleHandler)
 

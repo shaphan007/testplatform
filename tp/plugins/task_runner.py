@@ -5,11 +5,12 @@ import requests
 from .status_conf import StatusConf
 from ..models import Step, Case, Plan, Result
 from datetime import datetime
-
+import json
 
 class ApiRunner():
     def __init__(self, ip, port):
         self.host = f'http://{ip}:{port}'
+        print('host:{self.host}')
 
     # 执行api
     def exec_api(self, api):
@@ -19,13 +20,16 @@ class ApiRunner():
             @type api: 为具体测试api接口的实例化
             """
             self.url = self.host + api.path
-            method = StatusConf.http_method
+            method = StatusConf.http_method[api.method]
             content_type = StatusConf.content_types[api.content_type]
+            print(f"self.url:{self.url}")
+            print(f"method:{method}")
+            print(f"content_type:{content_type}")
             # 根据请求类型来判断传参 post,put --请求体传参
             if method in ['post', 'put']:
                 # 根据content_type 判断
                 if content_type == 'application/json':
-                    self.resp = requests.request(method, self.url, json=api.data)
+                    self.resp = requests.request(method, self.url, json=json.loads(api.data))
                 elif content_type == 'application/x-www-form-urlencoded':
                     self.resp = requests.request(method, self.url, data=api.data)
                 else:
@@ -35,8 +39,9 @@ class ApiRunner():
                 self.resp = requests.request(method, self.url, data=api.data)
 
         except Exception as e:
-            self.status = StatusConf.setp_status.error
+            self.status = StatusConf.step_status.error
             self.error = repr(e)  # 记录异常信息
+            print(f"步骤执行异常:{self.error}")
 
     # 检查预期与实际是否一致
     def check_result(self, expect):
@@ -45,6 +50,7 @@ class ApiRunner():
         @type expect: 预期
         """
         if self.resp:
+            print(f'self.resp.text:{self.resp.text}')
             if expect == self.resp.text:
                 # 修改状态
                 self.status = StatusConf.step_status.success
@@ -66,12 +72,17 @@ def step_run(step_id, test_env):
     target_step = Step.objects.get(pk=step_id)  # 获取测试步骤
     target_api = target_step.httpapi  # 查询step表
     # 更新步骤执行状态为running
-    target_step.status = StatusConf.setp_status.running  # 查询step表
+    target_step.status = StatusConf.step_status.running  # 查询step表
+    print(f"target_step.status:{target_step.status}")
     target_step.save()
     # 触发接口
-    api_runner = ApiRunner(ip, port)
-    api_runner.exec_api(target_api)
-    api_runner.check_result(target_step.expected)
+    print(f'执行步骤')
+    try:
+        api_runner = ApiRunner(ip, port)
+        api_runner.exec_api(target_api)
+        api_runner.check_result(target_step.expected)
+    except Exception as e:
+        print(f'用例步骤执行失败：{repr(e)}')
     # 执行完成 更新状态
     target_step.status = api_runner.status
     target_step.save()
@@ -85,8 +96,9 @@ def case_run(case_id, test_env):
 
     # 循环执行用例中的步骤
     for step in step_list:
+        print(f"step:{step}")
         res = step_run(step.id, test_env)
-
+        print(f"status：{res['status']}")
         if res['status'] != StatusConf.step_status.success:
             return {'recode': 500, 'msg': '运行中断', 'status': 'failed'}
     return {'recode': 200, 'msg': '运行结束', 'status': 'success'}
@@ -97,6 +109,7 @@ def plan_run(request):
     plan_id = request.GET.get('id')
     target_plan = Plan.objects.get(pk=plan_id)
     #  开始执行计划
+    print("开始执行计划")
     start_time = datetime.now()
     target_plan.status = StatusConf.plan_status.running  # 更新状态为正在执行
     target_plan.save()
@@ -107,11 +120,13 @@ def plan_run(request):
     pass_num = 0
     failed_num = 0
     for case in case_list:
+        print(f"case:{case}")
         res = case_run(case.id, test_env=target_plan.environment)
         if res['status'] == 'success':
             pass_num += 1
         else:
             failed_num += 1
+    print("用例执行计划结束")
     # 执行结束时间
     end_time = datetime.now()
     # 更新状态为已经执行

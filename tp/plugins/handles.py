@@ -9,11 +9,12 @@ from django.http import JsonResponse
 
 from tp.models import Tag, Case
 
-
 def info_handler(in_params, position_keys=None, option_keys=None):
     info = {}
     # 必填参数
     print(f'必填关键字：{position_keys}')
+    for key in in_params:
+        print (key)
     if position_keys is not None:
         for key in position_keys:
             print(f'必填关键字：{key}')
